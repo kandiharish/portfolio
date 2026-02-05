@@ -1,34 +1,24 @@
-# How to Push Your Code to GitHub 🚀
+# How to Update Your Code on GitHub 🔄
 
-Run these commands one by one in your terminal:
+Since you have already set up the repository, you just need to save the new changes.
 
-## 1. Initialize Git (If you haven't)
-```bash
-git init
-```
+Run these 3 commands in your terminal:
 
-## 2. Add All Files
+## 1. Stage the Changes
 ```bash
 git add .
 ```
+*(This tells Git: "I moved files, please track the new locations")*
 
-## 3. Commit Your Changes
+## 2. Commit the Changes
 ```bash
-git commit -m "Final portfolio polish: Recruiter feedback & EmailJS"
+git commit -m "Fix: Move images to public folder"
 ```
 
-## 4. Create a New Repository on GitHub
-1.  Go to [GitHub.com/new](https://github.com/new)
-2.  Name it `portfolio-v2` (or whatever you like).
-3.  Click **Create repository**.
-
-## 5. Link and Push
-Copy the commands GitHub gives you under "…or push an existing repository from the command line", which look like this:
-
+## 3. Push to GitHub
 ```bash
-git branch -M main
-git remote add origin https://github.com/kandiharish/YOUR-REPO-NAME.git
-git push -u origin main
+git push
 ```
 
-*(Replace `YOUR-REPO-NAME` with the actual name you created)*
+---
+**Note**: Vercel will automatically detect this push and redeploy your site within a minute! 🚀
