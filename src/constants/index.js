@@ -5,14 +5,12 @@ import {
     FaEnvelope,
 } from "react-icons/fa";
 
-import resume from "../../Harish Kandi Resume.pdf";
-
 // Email Updates
 export const HERO_CONTENT = {
     name: "Harish Kandi",
     tagline: "Building intelligent systems with code and creativity.",
     description: "I am a passionate AI Engineer & Full Stack Developer with expertise in building scalable web applications and intelligent automation systems. Transforming complex data into actionable insights.",
-    resumeLink: resume,
+    resumeLink: "/Harish Kandi Resume.pdf",
     contact: {
         email: "kandiharish2005@gmail.com",
         phone: "+91 6303138807",

@@ -3,7 +3,6 @@ import { HERO_CONTENT, LINKS } from "../constants";
 import { motion } from "framer-motion";
 import { FaArrowDown } from "react-icons/fa";
 import { Link } from "react-scroll";
-import profilePic from "../../picture.png";
 
 const BubbleBackground = () => {
     // Generate random bubbles
@@ -177,7 +176,7 @@ const Hero = () => {
                         <div className="absolute inset-2 rounded-full border border-accent/50 animate-[spin_15s_linear_infinite_reverse]"></div>
 
                         <img
-                            src={profilePic}
+                            src="/picture.png"
                             alt="Harish Kandi"
                             className="w-full h-full object-cover rounded-full border-4 border-primary shadow-[0_0_30px_rgba(59,130,246,0.3)] relative z-10"
                         />
