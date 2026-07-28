@@ -113,6 +113,45 @@ export const PROJECTS = [
     },
 ];
 
+export const FREELANCE_PROJECTS = [
+    {
+        title: "GNIMUN",
+        role: "Web Developer Lead",
+        technologies: ["Next.js", "Firebase", "Framer Motion"],
+        link: "https://gnimun.org",
+    },
+    {
+        title: "TEDxGNI",
+        role: "Web Developer Lead",
+        technologies: ["React", "Tailwind CSS", "Node.js"],
+        link: "https://tedxgni.vercel.app",
+    },
+    {
+        title: "DontWasteFood",
+        role: "Freelance Developer",
+        technologies: ["React", "MongoDB", "Express", "Google Maps"],
+        link: "https://dontwastefood.in",
+    },
+    {
+        title: "ImpactLedger",
+        role: "Freelance Developer",
+        technologies: ["React", "Tailwind CSS", "Web3"],
+        link: "https://impactledger.in",
+    },
+    {
+        title: "Plunto",
+        role: "Freelance Developer",
+        technologies: ["React", "Node.js", "MongoDB", "Stripe"],
+        link: "https://plunto.in",
+    },
+    {
+        title: "Cred.in Clone",
+        role: "Frontend Developer",
+        technologies: ["React", "Framer Motion", "GSAP"],
+        link: "https://cred.in",
+    }
+];
+
 // Testimonials Update
 export const TESTIMONIALS = [
     {
@@ -138,11 +177,41 @@ export const EDUCATION = [
         institution: "TSWR Sainik School",
         degree: "Intermediate (MPC)",
         duration: "2021 – 2023",
-        score: "",
+        score: "85%",
+    },
+    {
+        institution: "ZPHS Upparapalli",
+        degree: "SSC (10th Grade)",
+        duration: "Graduated 2021",
+        score: "100%",
     },
 ];
 
 export const EXPERIENCES = [
+    {
+        year: "Jan 2026 – June 2026",
+        role: "Agentic AI Intern",
+        company: "Innomatics Research Labs (Hyderabad)",
+        description: [
+            "Developed and tested backend services using Python and REST APIs to support real-time application workflows.",
+            "Performed debugging and validation of data flows, ensuring accuracy and reliability of system outputs.",
+            "Identified and resolved issues in API responses and backend logic, improving overall system performance.",
+            "Collaborated with developers to analyze requirements and enhance system testability and stability.",
+        ],
+        technologies: ["Python", "REST APIs", "Data Flow", "System Testing"],
+    },
+    {
+        year: "June 2025 – Jan 2026",
+        role: "Full Stack Intern",
+        company: "CourseVita (Remote)",
+        description: [
+            "Designed and tested REST APIs for authentication, data handling, and application workflows.",
+            "Validated application functionality through systematic testing and debugging of backend services.",
+            "Identified bugs and optimized database queries, improving performance and reliability.",
+            "Worked closely with the development team to ensure high-quality feature delivery and system stability.",
+        ],
+        technologies: ["REST APIs", "Authentication", "Database Optimization", "Testing"],
+    },
     {
         year: "May 2025 – Sep 2025",
         role: "Salesforce Developer Intern",

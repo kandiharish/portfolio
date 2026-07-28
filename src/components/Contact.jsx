@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { HERO_CONTENT } from "../constants";
 import { motion } from "framer-motion";
-import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaPaperPlane, FaCheckCircle } from "react-icons/fa";
+import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaCheckCircle } from "react-icons/fa";
 import emailjs from '@emailjs/browser';
 
 const Contact = () => {
@@ -23,17 +23,15 @@ const Contact = () => {
         setIsSending(true);
         setError(null);
 
-        // Credentials: Try Environment Variables first, then fallback to placeholders
         const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
         const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
         const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
 
-        // Validation Check
         if (SERVICE_ID === "YOUR_SERVICE_ID" || TEMPLATE_ID === "YOUR_TEMPLATE_ID" || PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
-            const errorMsg = "EmailJS Configuration Missing: Please set your Service ID, Template ID, and Public Key in Contact.jsx or .env file.";
+            const errorMsg = "EmailJS Configuration Missing: Please set your Service ID, Template ID, and Public Key.";
             console.error(errorMsg);
-            alert(errorMsg); // Immediate feedback to user
-            setError("Configuration Error: Check console for details.");
+            alert(errorMsg);
+            setError("Configuration Error.");
             setIsSending(false);
             return;
         }
@@ -47,24 +45,18 @@ const Contact = () => {
 
         emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
             .then((response) => {
-                console.log('SUCCESS!', response.status, response.text);
                 setIsSent(true);
                 setIsSending(false);
                 setFormData({ name: "", email: "", message: "" });
-                // Reset success message after 5 seconds
                 setTimeout(() => setIsSent(false), 5000);
             })
             .catch((err) => {
-                console.log('FAILED...', err);
                 let errorMessage = `Failed to send message: ${err.text || "Unknown error"}`;
-
-                // Check for network/adblock errors
                 if (err.message && (err.message.includes("Failed to fetch") || err.message.includes("NetworkError"))) {
-                    errorMessage = "Network Error: Unable to connect to EmailJS. Please disable AdBlockers or check your internet connection.";
+                    errorMessage = "Network Error: Unable to connect to EmailJS.";
                 }
-
                 setError(errorMessage);
-                alert(errorMessage); // Pop up for visibility
+                alert(errorMessage);
                 setIsSending(false);
             });
     };
@@ -78,35 +70,41 @@ const Contact = () => {
                     transition={{ duration: 0.5 }}
                     className="text-4xl font-bold font-heading text-center mb-16"
                 >
-                    Get in <span className="text-accent">Touch</span>
+                    Get in Touch
                 </motion.h2>
 
-                <div className="flex flex-col lg:flex-row gap-12 max-w-6xl mx-auto">
+                <div className="flex flex-col lg:flex-row gap-12 max-w-5xl mx-auto">
                     {/* Contact Info */}
                     <motion.div
-                        initial={{ x: -30, opacity: 0 }}
+                        initial={{ x: -20, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.5 }}
                         className="lg:w-1/2 space-y-8"
                     >
-                        <h3 className="text-2xl font-bold text-gray-200">Let's build something impactful.</h3>
-                        <p className="text-gray-400 text-lg">
-                            Whether you have a question, a project proposal, or just want to connect, feel free to reach out. I'm currently open to new opportunities.
+                        <h3 className="text-2xl font-bold text-white">Let's build something impactful.</h3>
+                        <p className="text-gray-400 text-lg leading-relaxed">
+                            Whether you have a question, a project proposal, or just want to connect, feel free to reach out.
                         </p>
 
-                        <div className="space-y-4">
+                        <div className="space-y-6 pt-4">
                             <div className="flex items-center gap-4 text-gray-300">
-                                <FaEnvelope className="text-accent text-xl" />
+                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                                    <FaEnvelope className="text-accent" />
+                                </div>
                                 <a href={`mailto:${HERO_CONTENT.contact.email}`} className="hover:text-white transition-colors">
                                     {HERO_CONTENT.contact.email}
                                 </a>
                             </div>
                             <div className="flex items-center gap-4 text-gray-300">
-                                <FaPhone className="text-accent text-xl" />
+                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                                    <FaPhone className="text-accent" />
+                                </div>
                                 <span>{HERO_CONTENT.contact.phone}</span>
                             </div>
                             <div className="flex items-center gap-4 text-gray-300">
-                                <FaMapMarkerAlt className="text-accent text-xl" />
+                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                                    <FaMapMarkerAlt className="text-accent" />
+                                </div>
                                 <span>{HERO_CONTENT.contact.location}</span>
                             </div>
                         </div>
@@ -114,12 +112,12 @@ const Contact = () => {
 
                     {/* Contact Form */}
                     <motion.div
-                        initial={{ x: 30, opacity: 0 }}
+                        initial={{ x: 20, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.6 }}
-                        className="lg:w-1/2 bg-primary p-8 rounded-2xl border border-gray-800 shadow-xl"
+                        transition={{ duration: 0.5 }}
+                        className="lg:w-1/2"
                     >
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <form onSubmit={handleSubmit} className="space-y-5 bg-primary/50 p-8 rounded-2xl border border-white/10">
                             <div>
                                 <label className="block text-gray-400 text-sm font-medium mb-2">Name</label>
                                 <input
@@ -128,8 +126,8 @@ const Contact = () => {
                                     value={formData.name}
                                     onChange={handleChange}
                                     required
-                                    className="w-full bg-secondary text-white rounded-lg border border-gray-700 focus:border-accent focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-colors"
-                                    placeholder="Your Name"
+                                    className="w-full bg-white/5 text-white rounded-lg border border-white/10 focus:border-accent focus:bg-white/10 focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-all placeholder-gray-600"
+                                    placeholder="Jane Doe"
                                 />
                             </div>
                             <div>
@@ -140,8 +138,8 @@ const Contact = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
-                                    className="w-full bg-secondary text-white rounded-lg border border-gray-700 focus:border-accent focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-colors"
-                                    placeholder="your.email@example.com"
+                                    className="w-full bg-white/5 text-white rounded-lg border border-white/10 focus:border-accent focus:bg-white/10 focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-all placeholder-gray-600"
+                                    placeholder="jane@example.com"
                                 />
                             </div>
                             <div>
@@ -152,8 +150,8 @@ const Contact = () => {
                                     value={formData.message}
                                     onChange={handleChange}
                                     required
-                                    className="w-full bg-secondary text-white rounded-lg border border-gray-700 focus:border-accent focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-colors"
-                                    placeholder="Your message here..."
+                                    className="w-full bg-white/5 text-white rounded-lg border border-white/10 focus:border-accent focus:bg-white/10 focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-all placeholder-gray-600 resize-none"
+                                    placeholder="How can we work together?"
                                 ></textarea>
                             </div>
 
@@ -162,21 +160,19 @@ const Contact = () => {
                             <button
                                 type="submit"
                                 disabled={isSending}
-                                className={`w-full font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 ${isSent
+                                className={`w-full font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isSent
                                     ? "bg-green-600 text-white cursor-default"
-                                    : "bg-accent hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20"
+                                    : "bg-white/10 hover:bg-white/20 text-white border border-white/10 hover:border-white/30"
                                     }`}
                             >
                                 {isSent ? (
                                     <>
-                                        <FaCheckCircle /> Message Sent!
+                                        <FaCheckCircle /> Sent Successfully
                                     </>
                                 ) : isSending ? (
                                     "Sending..."
                                 ) : (
-                                    <>
-                                        Send Message <FaPaperPlane className="text-sm" />
-                                    </>
+                                    "Send Message"
                                 )}
                             </button>
                         </form>

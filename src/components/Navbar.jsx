@@ -25,13 +25,14 @@ const Navbar = () => {
         { name: "About", to: "about" },
         { name: "Skills", to: "skills" },
         { name: "Projects", to: "projects" },
+        { name: "Leadership", to: "leadership" },
         { name: "Experience", to: "experience" },
         { name: "Contact", to: "contact" },
     ];
 
     return (
         <nav
-            className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "bg-primary/90 backdrop-blur-md shadow-lg py-4" : "bg-transparent py-6"
+            className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "bg-primary/90 backdrop-blur-md py-4 border-b border-white/5" : "bg-transparent py-6"
                 }`}
         >
             <div className="container mx-auto px-6 flex justify-between items-center">
@@ -40,10 +41,10 @@ const Navbar = () => {
                     to="hero"
                     smooth={true}
                     duration={500}
-                    className="cursor-pointer text-2xl font-bold font-heading flex items-center gap-2 text-white"
+                    className="cursor-pointer text-xl font-bold font-heading flex items-center gap-2 text-white"
                 >
                     <FaCode className="text-accent" />
-                    <span>Harish<span className="text-accent">.dev</span></span>
+                    <span>HarishKandi</span>
                 </Link>
 
                 {/* Desktop Menu */}
@@ -55,17 +56,16 @@ const Navbar = () => {
                             smooth={true}
                             duration={500}
                             offset={-70}
-                            className="cursor-pointer text-gray-300 hover:text-accent font-medium transition-colors relative group"
+                            className="cursor-pointer text-gray-400 hover:text-white text-sm font-medium transition-colors relative group"
                         >
                             {link.name}
-                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                         </Link>
                     ))}
                     <a
                         href={HERO_CONTENT.resumeLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-2 border border-accent text-accent rounded hover:bg-accent/10 transition-colors duration-300"
+                        className="px-5 py-2 border border-white/20 text-white text-sm font-medium rounded-lg hover:bg-white/10 hover:border-white/30 transition-colors duration-300"
                     >
                         Resume
                     </a>
@@ -73,7 +73,7 @@ const Navbar = () => {
 
                 {/* Mobile Menu Button */}
                 <div className="md:hidden z-50">
-                    <button onClick={() => setIsOpen(!isOpen)} className="text-white text-2xl focus:outline-none">
+                    <button onClick={() => setIsOpen(!isOpen)} className="text-white text-xl focus:outline-none">
                         {isOpen ? <FaTimes /> : <FaBars />}
                     </button>
                 </div>
@@ -83,11 +83,11 @@ const Navbar = () => {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ x: "100%" }}
-                        animate={{ x: 0 }}
-                        exit={{ x: "100%" }}
-                        transition={{ type: "tween", duration: 0.3 }}
-                        className="fixed inset-0 bg-primary z-40 flex flex-col items-center justify-center md:hidden"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ type: "tween", duration: 0.2 }}
+                        className="absolute top-full left-0 w-full bg-primary/95 backdrop-blur-lg border-b border-white/10 flex flex-col items-center py-8 md:hidden"
                     >
                         {navLinks.map((link, index) => (
                             <Link
@@ -95,8 +95,9 @@ const Navbar = () => {
                                 to={link.to}
                                 smooth={true}
                                 duration={500}
+                                offset={-70}
                                 onClick={() => setIsOpen(false)}
-                                className="text-2xl text-white font-medium my-4 hover:text-accent transition-colors cursor-pointer"
+                                className="text-lg text-gray-300 font-medium py-3 hover:text-white transition-colors cursor-pointer w-full text-center"
                             >
                                 {link.name}
                             </Link>
@@ -105,7 +106,7 @@ const Navbar = () => {
                             href={HERO_CONTENT.resumeLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="mt-6 px-8 py-3 border border-accent text-accent rounded-full text-lg hover:bg-accent/10 transition-colors"
+                            className="mt-4 px-8 py-3 border border-white/20 text-white rounded-lg text-base font-medium hover:bg-white/10 transition-colors"
                         >
                             View Resume
                         </a>

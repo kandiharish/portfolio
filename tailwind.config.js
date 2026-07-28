@@ -7,9 +7,9 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: "#0f172a", // Slate 900
-                secondary: "#1e293b", // Slate 800
-                accent: "#3b82f6", // Blue 500
+                primary: "#070B14", // Rich Charcoal/Navy Black
+                secondary: "#0F1626", // Dark Slate/Glass base
+                accent: "#14F1D9", // Cyber Teal/Cyan Accent
             },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
