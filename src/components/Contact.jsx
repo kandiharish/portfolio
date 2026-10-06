@@ -1,181 +1,235 @@
-import React, { useState } from "react";
-import { HERO_CONTENT } from "../constants";
-import { motion } from "framer-motion";
-import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaCheckCircle } from "react-icons/fa";
-import emailjs from '@emailjs/browser';
+import React, { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { FaArrowRight, FaCheck, FaCopy, FaFileAlt, FaGithub, FaLinkedin, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
+import emailjs from "@emailjs/browser";
+import { HERO_CONTENT, LINKS } from "../constants";
+
+const EASE = [0.16, 1, 0.3, 1];
+const { email, phone, location } = HERO_CONTENT.contact;
+const LINKEDIN = LINKS.find((l) => l.name === "LinkedIn")?.link;
+const GITHUB = LINKS.find((l) => l.name === "GitHub")?.link;
+
+const timeFormat = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", hour: "numeric", minute: "2-digit" });
+
+const useLocalTime = () => {
+    const [time, setTime] = useState(() => timeFormat.format(new Date()));
+    useEffect(() => {
+        const id = setInterval(() => setTime(timeFormat.format(new Date())), 20000);
+        return () => clearInterval(id);
+    }, []);
+    return time;
+};
+
+const Field = ({ label, as = "input", ...props }) => {
+    const Tag = as;
+    return (
+        <label className="block">
+            <span className="mb-2 block font-mono text-[11px] uppercase tracking-widest text-gray-500">{label}</span>
+            <Tag
+                {...props}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none transition-colors placeholder:text-gray-600 focus:border-accent/60 focus:bg-white/[0.05]"
+            />
+        </label>
+    );
+};
 
 const Contact = () => {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        message: ""
-    });
-    const [isSending, setIsSending] = useState(false);
-    const [isSent, setIsSent] = useState(false);
-    const [error, setError] = useState(null);
+    const reduce = useReducedMotion();
+    const time = useLocalTime();
+    const [copied, setCopied] = useState(false);
+    const [form, setForm] = useState({ name: "", email: "", message: "" });
+    const [state, setState] = useState("idle"); // idle | sending | sent | error
+    const [error, setError] = useState("");
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const copyEmail = () => {
+        navigator.clipboard?.writeText(email);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
 
-    const handleSubmit = (e) => {
+    const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+    const onSubmit = async (e) => {
         e.preventDefault();
-        setIsSending(true);
-        setError(null);
+        const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+        const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+        const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-        const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
-        const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
-        const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
-
-        if (SERVICE_ID === "YOUR_SERVICE_ID" || TEMPLATE_ID === "YOUR_TEMPLATE_ID" || PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
-            const errorMsg = "EmailJS Configuration Missing: Please set your Service ID, Template ID, and Public Key.";
-            console.error(errorMsg);
-            alert(errorMsg);
-            setError("Configuration Error.");
-            setIsSending(false);
+        if (!serviceId || !templateId || !publicKey) {
+            setState("error");
+            setError(`The form isn't connected right now — please email ${email} directly.`);
             return;
         }
 
-        const templateParams = {
-            from_name: formData.name,
-            from_email: formData.email,
-            message: formData.message,
-            to_name: "Harish Kandi",
-        };
-
-        emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
-            .then((response) => {
-                setIsSent(true);
-                setIsSending(false);
-                setFormData({ name: "", email: "", message: "" });
-                setTimeout(() => setIsSent(false), 5000);
-            })
-            .catch((err) => {
-                let errorMessage = `Failed to send message: ${err.text || "Unknown error"}`;
-                if (err.message && (err.message.includes("Failed to fetch") || err.message.includes("NetworkError"))) {
-                    errorMessage = "Network Error: Unable to connect to EmailJS.";
-                }
-                setError(errorMessage);
-                alert(errorMessage);
-                setIsSending(false);
-            });
+        setState("sending");
+        setError("");
+        try {
+            await emailjs.send(
+                serviceId,
+                templateId,
+                { from_name: form.name, from_email: form.email, message: form.message, to_name: HERO_CONTENT.name },
+                publicKey
+            );
+            setState("sent");
+            setForm({ name: "", email: "", message: "" });
+        } catch (err) {
+            setState("error");
+            const network = err?.message && /fetch|network/i.test(err.message);
+            setError(
+                network
+                    ? "Couldn't reach the mail service — check your connection, or email me directly."
+                    : `Something went wrong sending that${err?.text ? ` (${err.text})` : ""}. Please email me directly.`
+            );
+        }
     };
 
     return (
-        <section id="contact" className="py-20 bg-secondary text-white">
-            <div className="container mx-auto px-6">
-                <motion.h2
-                    initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-4xl font-bold font-heading text-center mb-16"
-                >
-                    Get in Touch
-                </motion.h2>
+        <section id="contact" className="relative overflow-hidden bg-[#070b14] py-28 text-white md:py-36">
+            <div className="pointer-events-none absolute -right-40 top-10 h-[520px] w-[520px] rounded-full bg-accent/[0.06] blur-[140px]" />
 
-                <div className="flex flex-col lg:flex-row gap-12 max-w-5xl mx-auto">
-                    {/* Contact Info */}
+            <div className="container relative mx-auto max-w-6xl px-6">
+                <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
+                    {/* Left: the pitch */}
                     <motion.div
-                        initial={{ x: -20, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className="lg:w-1/2 space-y-8"
+                        initial={reduce ? false : { opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, ease: EASE }}
                     >
-                        <h3 className="text-2xl font-bold text-white">Let's build something impactful.</h3>
-                        <p className="text-gray-400 text-lg leading-relaxed">
-                            Whether you have a question, a project proposal, or just want to connect, feel free to reach out.
+                        <div className="mb-6 flex items-center gap-3">
+                            <span className="h-px w-10 bg-accent" />
+                            <span className="text-xs font-bold uppercase tracking-[0.3em] text-accent">Contact</span>
+                        </div>
+                        <h2 className="font-heading text-5xl font-bold leading-[1.02] tracking-tight md:text-7xl">
+                            Let's build
+                            <br />
+                            <span className="text-accent">something real.</span>
+                        </h2>
+                        <p className="mt-6 max-w-md text-lg leading-relaxed text-gray-400">
+                            Open to internships and full-time roles in AI and full-stack engineering — and to interesting freelance work.
                         </p>
 
-                        <div className="space-y-6 pt-4">
-                            <div className="flex items-center gap-4 text-gray-300">
-                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                                    <FaEnvelope className="text-accent" />
-                                </div>
-                                <a href={`mailto:${HERO_CONTENT.contact.email}`} className="hover:text-white transition-colors">
-                                    {HERO_CONTENT.contact.email}
-                                </a>
-                            </div>
-                            <div className="flex items-center gap-4 text-gray-300">
-                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                                    <FaPhone className="text-accent" />
-                                </div>
-                                <span>{HERO_CONTENT.contact.phone}</span>
-                            </div>
-                            <div className="flex items-center gap-4 text-gray-300">
-                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                                    <FaMapMarkerAlt className="text-accent" />
-                                </div>
-                                <span>{HERO_CONTENT.contact.location}</span>
-                            </div>
+                        {/* Primary action: copy the email */}
+                        <button
+                            onClick={copyEmail}
+                            className="group mt-10 flex w-full max-w-md items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-left transition-colors hover:border-accent/50"
+                        >
+                            <span className="min-w-0">
+                                <span className="block font-mono text-[11px] uppercase tracking-widest text-gray-500">
+                                    {copied ? "Copied to clipboard" : "Email — click to copy"}
+                                </span>
+                                <span className="mt-1 block truncate text-lg font-semibold text-white">{email}</span>
+                            </span>
+                            <span
+                                className={`grid h-10 w-10 shrink-0 place-items-center rounded-full transition-colors ${
+                                    copied ? "bg-accent text-[#070b14]" : "bg-white/[0.06] text-gray-300 group-hover:text-accent"
+                                }`}
+                            >
+                                {copied ? <FaCheck /> : <FaCopy className="text-sm" />}
+                            </span>
+                        </button>
+
+                        <div className="mt-4 flex flex-wrap gap-2">
+                            {[
+                                LINKEDIN && { href: LINKEDIN, icon: FaLinkedin, label: "LinkedIn" },
+                                GITHUB && { href: GITHUB, icon: FaGithub, label: "GitHub" },
+                                { href: HERO_CONTENT.resumeLink, icon: FaFileAlt, label: "Résumé" },
+                            ]
+                                .filter(Boolean)
+                                .map(({ href, icon: Icon, label }) => (
+                                    <a
+                                        key={label}
+                                        href={href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-gray-300 transition-colors hover:border-accent/50 hover:text-white"
+                                    >
+                                        <Icon className="text-accent" /> {label}
+                                    </a>
+                                ))}
+                        </div>
+
+                        <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-400">
+                            <span className="inline-flex items-center gap-2">
+                                <FaMapMarkerAlt className="text-accent/80" /> {location} · <span className="text-gray-200">{time}</span> IST
+                            </span>
+                            <a href={`tel:${phone.replace(/\s/g, "")}`} className="inline-flex items-center gap-2 transition-colors hover:text-white">
+                                <FaPhone className="text-accent/80" /> {phone}
+                            </a>
+                            <span className="inline-flex items-center gap-2">
+                                <span className="h-2 w-2 rounded-full bg-green-400" /> Available for opportunities
+                            </span>
                         </div>
                     </motion.div>
 
-                    {/* Contact Form */}
+                    {/* Right: the form */}
                     <motion.div
-                        initial={{ x: 20, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className="lg:w-1/2"
+                        initial={reduce ? false : { opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+                        className="rounded-3xl border border-white/10 bg-[#0b1220] p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] md:p-8"
                     >
-                        <form onSubmit={handleSubmit} className="space-y-5 bg-primary/50 p-8 rounded-2xl border border-white/10">
-                            <div>
-                                <label className="block text-gray-400 text-sm font-medium mb-2">Name</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full bg-white/5 text-white rounded-lg border border-white/10 focus:border-accent focus:bg-white/10 focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-all placeholder-gray-600"
-                                    placeholder="Jane Doe"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 text-sm font-medium mb-2">Email</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full bg-white/5 text-white rounded-lg border border-white/10 focus:border-accent focus:bg-white/10 focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-all placeholder-gray-600"
-                                    placeholder="jane@example.com"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 text-sm font-medium mb-2">Message</label>
-                                <textarea
-                                    name="message"
-                                    rows="4"
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full bg-white/5 text-white rounded-lg border border-white/10 focus:border-accent focus:bg-white/10 focus:ring-1 focus:ring-accent outline-none px-4 py-3 transition-all placeholder-gray-600 resize-none"
-                                    placeholder="How can we work together?"
-                                ></textarea>
-                            </div>
-
-                            {error && <p className="text-red-500 text-sm">{error}</p>}
-
-                            <button
-                                type="submit"
-                                disabled={isSending}
-                                className={`w-full font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isSent
-                                    ? "bg-green-600 text-white cursor-default"
-                                    : "bg-white/10 hover:bg-white/20 text-white border border-white/10 hover:border-white/30"
-                                    }`}
+                        {state === "sent" ? (
+                            <motion.div
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="flex min-h-[380px] flex-col items-center justify-center text-center"
                             >
-                                {isSent ? (
-                                    <>
-                                        <FaCheckCircle /> Sent Successfully
-                                    </>
-                                ) : isSending ? (
-                                    "Sending..."
-                                ) : (
-                                    "Send Message"
+                                <span className="grid h-14 w-14 place-items-center rounded-full bg-accent text-xl text-[#070b14]">
+                                    <FaCheck />
+                                </span>
+                                <h3 className="mt-5 font-heading text-2xl font-bold">Message sent</h3>
+                                <p className="mt-2 max-w-xs text-gray-400">Thanks for reaching out — I'll get back to you soon.</p>
+                                <button onClick={() => setState("idle")} className="mt-6 text-sm text-gray-400 transition-colors hover:text-accent">
+                                    Send another message
+                                </button>
+                            </motion.div>
+                        ) : (
+                            <form onSubmit={onSubmit} className="space-y-5">
+                                <div>
+                                    <h3 className="font-heading text-xl font-bold">Send a message</h3>
+                                    <p className="mt-1 text-sm text-gray-500">Goes straight to my inbox.</p>
+                                </div>
+                                <Field label="Name" name="name" value={form.name} onChange={onChange} required placeholder="Your name" autoComplete="name" />
+                                <Field
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    value={form.email}
+                                    onChange={onChange}
+                                    required
+                                    placeholder="you@company.com"
+                                    autoComplete="email"
+                                />
+                                <Field
+                                    label="Message"
+                                    as="textarea"
+                                    name="message"
+                                    rows={4}
+                                    value={form.message}
+                                    onChange={onChange}
+                                    required
+                                    placeholder="A role, a project, or just hello…"
+                                    style={{ resize: "none" }}
+                                />
+
+                                {state === "error" && (
+                                    <p role="alert" className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+                                        {error}
+                                    </p>
                                 )}
-                            </button>
-                        </form>
+
+                                <button
+                                    type="submit"
+                                    disabled={state === "sending"}
+                                    className="group flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3.5 font-bold text-[#070b14] transition-opacity hover:opacity-90 disabled:opacity-60"
+                                >
+                                    {state === "sending" ? "Sending…" : "Send message"}
+                                    {state !== "sending" && <FaArrowRight className="text-sm transition-transform group-hover:translate-x-0.5" />}
+                                </button>
+                            </form>
+                        )}
                     </motion.div>
                 </div>
             </div>
