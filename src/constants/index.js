@@ -1,9 +1,4 @@
-import {
-    FaGithub,
-    FaLinkedin,
-    FaTwitter,
-    FaEnvelope,
-} from "react-icons/fa";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 // Email Updates
 export const HERO_CONTENT = {
@@ -25,11 +20,43 @@ export const LINKS = [
 
 // ... (Education, Experience, Project array declaration...)
 
-// Project Updates for specific items:
-// This replacement is tricky for a single block. I'll split into multiple replacements for safety.
-// I will target the PROJECTS array completely to be sure.
-
 export const PROJECTS = [
+    {
+        title: "ReadyForRound",
+        description: "A free AI mock-interview platform: talk to an AI interviewer by voice, get an honest feedback report in about a minute, and a study plan built from your gaps. Company-style rounds for 12 companies and 13 roles, with a speaking coach for pace and filler words.",
+        technologies: ["React 19", "TypeScript", "Node.js", "Express", "Supabase", "Groq LLM", "Whisper", "Tailwind CSS"],
+        link: "https://ready-for-round.vercel.app",
+        github: "https://github.com/kandiharish/ReadyForRound",
+        demo: "https://ready-for-round.vercel.app",
+        image: "/projects/readyforround.jpg"
+    },
+    {
+        title: "RAG Customer Support Assistant",
+        description: "Answers support questions from real PDF documents and escalates uncertain ones to a human instead of guessing. Retrieval with ChromaDB, routing with a LangGraph workflow, served over FastAPI.",
+        technologies: ["Python", "LangGraph", "ChromaDB", "FastAPI", "xAI Grok", "sentence-transformers"],
+        link: "#",
+        github: "https://github.com/kandiharish/RAG-Based-Customer-Support-Assistant",
+        demo: "#",
+        image: null
+    },
+    {
+        title: "MongoTalk",
+        description: "Ask a MongoDB database questions in plain English. Gemini translates them into safe, read-only queries, with automatic schema detection and conversation context for follow-ups.",
+        technologies: ["React", "Node.js", "Express", "MongoDB", "Gemini 1.5"],
+        link: "https://mongo-talk.vercel.app",
+        github: "https://github.com/kandiharish/MongoTalk",
+        demo: "https://mongo-talk.vercel.app",
+        image: "/projects/mongotalk.jpg"
+    },
+    {
+        title: "Falcon",
+        description: "Forensic Analysis and Linked Crime Observation Network — an investigation-support platform that turns fragmented evidence into connected, explainable intelligence, with the investigator kept in control.",
+        technologies: ["Python", "FastAPI", "PostgreSQL", "PostGIS", "pgvector", "Ollama", "TypeScript", "Docker"],
+        link: "#",
+        github: "https://github.com/kandiharish/Falcon",
+        demo: "#",
+        image: null
+    },
     {
         title: "GigHub",
         description: "A high-performance freelance marketplace handling real-time transactions. Reduced hiring friction by 40% with instant chat and secure Stripe payments.",
@@ -37,7 +64,7 @@ export const PROJECTS = [
         link: "https://gighub-app.vercel.app",
         github: "https://github.com/kandiharish/gighub-app",
         demo: "https://gighub-app.vercel.app",
-        image: "/gighub.png"
+        image: "/projects/gighub.jpg"
     },
     {
         title: "TaskNext",
@@ -46,7 +73,7 @@ export const PROJECTS = [
         link: "https://task-next-nine.vercel.app",
         github: "https://github.com/kandiharish/TaskNext",
         demo: "https://task-next-nine.vercel.app",
-        image: "/tasknext.png"
+        image: "/projects/tasknext.jpg"
     },
     {
         title: "LoanFlowAI",
@@ -55,7 +82,7 @@ export const PROJECTS = [
         link: "https://loan-flow-ai-two.vercel.app",
         github: "https://github.com/kandiharish/LoanFlowAi",
         demo: "https://loan-flow-ai-two.vercel.app",
-        image: "/loanflow.png"
+        image: "/projects/loanflow.jpg"
     },
     {
         title: "Decentralized Land Registry",
@@ -64,7 +91,7 @@ export const PROJECTS = [
         link: "https://y-black-ten.vercel.app",
         github: "https://github.com/kandiharish/HTF25-Team-212",
         demo: "https://y-black-ten.vercel.app",
-        image: "/decentralised.png"
+        image: "/projects/land-registry.jpg"
     },
     {
         title: "Universal Support Chatbot",
@@ -73,7 +100,7 @@ export const PROJECTS = [
         link: "#",
         github: "https://github.com/kandiharish/Universal-Language-Support-Chatbot",
         demo: "#",
-        image: "/usl chatbot.png"
+        image: "/projects/support-chatbot.jpg"
     },
     {
         title: "HandsMen Threads",
@@ -82,7 +109,7 @@ export const PROJECTS = [
         link: "#",
         github: "https://github.com/kandiharish/HandsMen-Threads_Mens-Fashion_Project",
         demo: "#",
-        image: "/handsmen.png"
+        image: "/projects/handsmen.jpg"
     },
     {
         title: "Learning Path Generator (MCP)",
@@ -91,7 +118,7 @@ export const PROJECTS = [
         link: "#",
         github: "https://github.com/kandiharish/MCP-Learning-Path-Generator",
         demo: "#",
-        image: "/mcp.png"
+        image: "/projects/mcp.jpg"
     },
     {
         title: "Sahayak - AI Teaching Assistant",
@@ -100,7 +127,7 @@ export const PROJECTS = [
         link: "#",
         github: "https://github.com/kandiharish/EduvVision-AI",
         demo: "#",
-        image: "/sahayak.png"
+        image: "/projects/sahayak.jpg"
     },
     {
         title: "Medical Chatbot (MedBot)",
@@ -109,48 +136,88 @@ export const PROJECTS = [
         link: "#",
         github: "https://github.com/kandiharish/Gen-AI",
         demo: "#",
-        image: "/medbot.png"
+        image: "/projects/medbot.jpg"
     },
 ];
 
+// Client work and leadership roles. `kind` splits them on the page; `image` is a tall capture of the live site.
 export const FREELANCE_PROJECTS = [
     {
-        title: "GNIMUN",
-        role: "Web Developer Lead",
-        technologies: ["Next.js", "Firebase", "Framer Motion"],
-        link: "https://gnimun.org",
-    },
-    {
-        title: "TEDxGNI",
-        role: "Web Developer Lead",
-        technologies: ["React", "Tailwind CSS", "Node.js"],
-        link: "https://tedxgni.vercel.app",
-    },
-    {
-        title: "DontWasteFood",
+        title: "LK Events",
+        kind: "client",
         role: "Freelance Developer",
-        technologies: ["React", "MongoDB", "Express", "Google Maps"],
-        link: "https://dontwastefood.in",
-    },
-    {
-        title: "ImpactLedger",
-        role: "Freelance Developer",
-        technologies: ["React", "Tailwind CSS", "Web3"],
-        link: "https://impactledger.in",
+        summary: "Website for an event-production company — décor, lighting, sound, DJ and LED-screen setups for weddings, corporate events and celebrations.",
+        technologies: ["Next.js", "React", "Tailwind CSS"],
+        link: "https://lk-events.vercel.app",
+        image: "/clients/lk-events.jpg",
     },
     {
         title: "Plunto",
+        kind: "client",
         role: "Freelance Developer",
+        summary: "Online store for a wholesale grocery business — categories, daily deals and cart for spices, rice, oils and fresh produce.",
         technologies: ["React", "Node.js", "MongoDB", "Stripe"],
         link: "https://plunto.in",
+        image: "/clients/plunto.jpg",
     },
     {
-        title: "Cred.in Clone",
-        role: "Frontend Developer",
-        technologies: ["React", "Framer Motion", "GSAP"],
-        link: "https://cred.in",
-    }
+        title: "DontWasteFood",
+        kind: "client",
+        role: "Freelance Developer",
+        summary: "Website for a Hyderabad food-rescue movement — its work on the ground, media coverage and donations.",
+        technologies: ["React", "MongoDB", "Express", "Google Maps"],
+        link: "https://dontwastefood.in",
+        image: "/clients/dontwastefood.jpg",
+    },
+    {
+        title: "ImpactCred",
+        kind: "client",
+        role: "Freelance Developer",
+        summary: "Certification and trust-verification platform for NGOs, CSR teams and social enterprises.",
+        technologies: ["React", "Redux Toolkit", "Node.js", "Express", "MongoDB"],
+        link: "https://impact-cred.vercel.app",
+        image: "/clients/impactcred.jpg",
+    },
+    {
+        title: "ImpactLedger",
+        kind: "client",
+        role: "Freelance Developer",
+        summary: "A digital editorial publication documenting and amplifying stories of social impact.",
+        technologies: ["React", "TypeScript", "Supabase", "Tailwind CSS"],
+        link: "https://impact-ledger-inky.vercel.app",
+        image: "/clients/impactledger.jpg",
+    },
+    {
+        title: "ClassPulse",
+        kind: "client",
+        role: "Freelance Developer",
+        summary: "Smart attendance for a college class — mark attendance, track permissions and history, and share the day's report instantly.",
+        technologies: ["JavaScript", "HTML", "CSS"],
+        link: "https://classpulse-gilt.vercel.app",
+        image: "/clients/classpulse.jpg",
+    },
+    {
+        title: "GNIMUN",
+        kind: "lead",
+        role: "Web Developer Lead",
+        summary: "Official website for Guru Nanak Institutions' Model United Nations conference.",
+        technologies: ["HTML", "CSS", "JavaScript"],
+        link: "https://github.com/kandiharish/GNIMUN-2025",
+        image: null,
+    },
+    {
+        title: "TEDxGNI",
+        kind: "lead",
+        role: "Web Developer Lead",
+        summary: "Event website for TEDxGNI 2026 — \"Redefining Success\".",
+        technologies: ["React", "Tailwind CSS"],
+        link: "https://tedxgni.vercel.app",
+        image: null,
+    },
 ];
+
+// Paid client work only (excludes leadership roles) — used for counts like "6 client sites"
+export const CLIENT_PROJECTS = FREELANCE_PROJECTS.filter((p) => p.kind === "client");
 
 // Testimonials Update
 export const TESTIMONIALS = [
@@ -254,32 +321,38 @@ export const CERTIFICATIONS = [
     {
         name: "Oracle Cloud Infrastructure 2025 – AI Foundations Associate",
         issuer: "Oracle",
-        link: "/Harish Kandi Oracle Certificate.pdf"
+        link: "/Harish Kandi Oracle Certificate.pdf",
+        preview: "/certs/oracle.jpg"
     },
     {
         name: "Gen AI Exchange Hackathon 2025",
         issuer: "Hack2skill & Google Cloud",
-        link: "/Hack2skill-Certificate.png"
+        link: "/Hack2skill-Certificate.png",
+        preview: "/certs/hack2skill.jpg"
     },
     {
         name: "Quantum Computing Program",
         issuer: "IIT Roorkee & CDAC Hyderabad",
-        link: "/cdacqbit.jpg"
+        link: "/cdacqbit.jpg",
+        preview: "/certs/cdac-quantum.jpg"
     },
     {
         name: "CodeClash Competition",
         issuer: "CodeClash",
-        link: "/codeclash cert.pdf"
+        link: "/codeclash cert.pdf",
+        preview: "/certs/codeclash.jpg"
     },
     {
         name: "Kaggle Python Coder",
         issuer: "Kaggle",
-        link: "/kaggle python coder.jpg"
+        link: "/kaggle python coder.jpg",
+        preview: "/certs/kaggle.jpg"
     },
     {
         name: "Nation Building Participation",
         issuer: "Government of India",
-        link: "/nationbuilding.pdf"
+        link: "/nationbuilding.pdf",
+        preview: "/certs/nation-building.jpg"
     },
 ];
 
